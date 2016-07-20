@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+	<select name="sheng" id="sheng">
+		
+	</select>
+</body>
+	<script>
+		$(function(){
+			$.ajax({
+				url:'01.php',
+				type:'get',
+				data:{upid:0},
+				dataType:'json',
+				success:function(data){
+					for(var i=0;i<data.length;i++){
+						str = '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+						$('#sheng').append(str);
+					}
+				},
+				error:function(){
+					alert('ajax相应失败！');
+				}
+			})
+
+			$('select').live('change',function(){
+				id = $(this).val();
+				ss = $(this);
+				ss.nextAll().remove();
+				$.ajax({
+					url:'01.php',
+					data:{upid:id},
+					dataType:'json',
+					type:'get',
+					success:function(data){
+						if(data.length>0){
+					s = $('<select name="shi" id=""></select>');
+						console.log(s);
+						// console.log(data);
+						for(var i=0;i<data.length;i++	){
+							option = '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+							s.append(option);
+						}
+						ss.after(s);
+						}
+						
+					},
+					error:function(){
+						alert('ajax请求失败！');
+					}
+				})
+			})
+		})
+	</script>
+</html>
